@@ -23,8 +23,8 @@ else:
 
 FILE_NAME_1 = os.getenv("FILE_NAME_1", "pr.data.0.Current")
 FILE_NAME_2 = os.getenv("FILE_NAME_2", "step_2.json")
-SERIES_ID = "PRS30006032"
-QUATER = "Q01"
+SERIES_ID = os.getenv("SERIES_ID", "PRS30006032")
+QUATER = os.getenv("QUATER","Q01")
 
 
 async def download_from_s3():
