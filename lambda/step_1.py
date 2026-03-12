@@ -9,12 +9,21 @@ import aiohttp
 from bs4 import BeautifulSoup
 from loguru import logger
 
+EXECUTION_LEVEL = os.getenv("EXECUTION_LEVEL", "local") # if local then fall back to local execution
+
 # might change get them from environment
 BASE_URL = os.getenv("BASE_URL", "https://download.bls.gov/pub/time.series/pr/")
 BUCKET_NAME = os.getenv("BUCKET_NAME", "rearc-quest")
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "minioadmin")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "minioadmin")
-AWS_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL", "http://localhost:9000")
+
+if EXECUTION_LEVEL == "local":
+    AWS_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL", "http://localhost:9000")
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "minioadmin")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "minioadmin")
+else:
+    AWS_ENDPOINT_URL = None
+    AWS_ACCESS_KEY_ID = None
+    AWS_SECRET_ACCESS_KEY = None
+
 AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 
 # default to the program doesnt change

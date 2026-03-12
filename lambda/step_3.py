@@ -7,14 +7,24 @@ import aioboto3
 import pandas as pd
 from loguru import logger
 
+EXECUTION_LEVEL = os.getenv("EXECUTION_LEVEL", "local") # if local then fall back to local execution
+
 BUCKET_NAME = os.getenv("BUCKET_NAME", "rearc-quest")
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "minioadmin")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "minioadmin")
-AWS_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL", "http://localhost:9000")
 AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+
+if EXECUTION_LEVEL == "local":
+    AWS_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL", "http://localhost:9000")
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "minioadmin")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "minioadmin")
+else:
+    AWS_ENDPOINT_URL = None
+    AWS_ACCESS_KEY_ID = None
+    AWS_SECRET_ACCESS_KEY = None
 
 FILE_NAME_1 = os.getenv("FILE_NAME_1", "pr.data.0.Current")
 FILE_NAME_2 = os.getenv("FILE_NAME_2", "step_2.json")
+SERIES_ID = "PRS30006032"
+QUATER = "Q01"
 
 
 async def download_from_s3():
@@ -68,7 +78,7 @@ def question_2(df: pd.DataFrame):
     yearly = df.groupby(["series_id", "year"], as_index=False)["value"].sum()
     # Step 2: find best year per series
     result = yearly.loc[yearly.groupby("series_id")["value"].idxmax()]
-    print(result.head())
+    logger.info(result)
     return result
 
 
@@ -85,7 +95,7 @@ def question_3(df_1: pd.DataFrame, df_2: pd.DataFrame, series_id: str, period: s
     # Step 3: merge dataframes and filter the notna values
     merged = pd.merge(filtered, df_2, on="year", how="left")
     merged = merged[merged["Population"].notna()]
-    print(merged.head())
+    logger.info(merged)
     return merged
 
 
@@ -93,7 +103,7 @@ async def main():
     df1, df2 = await download_and_convert_to_dataframe()
     question_1(df2)
     question_2(df1)
-    question_3(df1, df2, "PRS30006032", "Q01")
+    question_3(df1, df2, SERIES_ID, QUATER)
 
 
 def handler(event, context):

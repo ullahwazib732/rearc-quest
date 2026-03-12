@@ -90,6 +90,7 @@ class RearcQuestStack(Stack):
                 "PARAM_CUBES": "acs_yg_total_population_1",
                 "PARAM_DRILLDOWN": "Year,Nation",
                 "PARAM_MEASURES": "Population",
+                "EXECUTION_LEVEL": "aws",
             }
         )
 
@@ -107,6 +108,7 @@ class RearcQuestStack(Stack):
             environment={
                 "BUCKET_NAME": bucket.bucket_name,
                 "BASE_URL": "https://download.bls.gov/pub/time.series/pr/",
+                "EXECUTION_LEVEL": "aws",
             }
         )
 
@@ -125,6 +127,9 @@ class RearcQuestStack(Stack):
                 "BUCKET_NAME": bucket.bucket_name,
                 "FILE_NAME_1": "pr.data.0.Current",
                 "FILE_NAME_2": "step_2.json",
+                "EXECUTION_LEVEL": "aws",
+                "SERIES_ID" : "PRS30006032",
+                "QUATER" : "Q01",
             }
         )
 

@@ -10,6 +10,8 @@ import aioboto3
 import aiohttp
 from loguru import logger
 
+EXECUTION_LEVEL = os.getenv("EXECUTION_LEVEL", "local") # if local then fall back to local execution
+
 # URL related params from environment as per the documentation
 BASE_URL = os.getenv("BASE_URL", "https://honolulu-api.datausa.io/tesseract/")
 # format lets give an option but lets also choose JSON as default
@@ -19,10 +21,16 @@ PARAM_DRILLDOWN = os.getenv("PARAM_DRILLDOWN", "Year,Nation")
 PARAM_MEASURES = os.getenv("PARAM_MEASURES", "Population")
 
 BUCKET_NAME = os.getenv("BUCKET_NAME", "rearc-quest")
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "minioadmin")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "minioadmin")
-AWS_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL", "http://localhost:9000")
 AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+
+if EXECUTION_LEVEL == "local":
+    AWS_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL", "http://localhost:9000")
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "minioadmin")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "minioadmin")
+else:
+    AWS_ENDPOINT_URL = None
+    AWS_ACCESS_KEY_ID = None
+    AWS_SECRET_ACCESS_KEY = None
 
 
 def generate_url():
