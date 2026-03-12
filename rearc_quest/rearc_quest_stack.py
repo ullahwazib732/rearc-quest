@@ -51,11 +51,9 @@ class RearcQuestStack(Stack):
             compatible_runtimes=[_lambda.Runtime.PYTHON_3_11]
         )
 
-        pandas_layer = _lambda.LayerVersion(
-            self,
-            "PandasLayer",
-            code=_lambda.Code.from_asset("lambda_layers/pandas"),
-            compatible_runtimes=[_lambda.Runtime.PYTHON_3_11]
+        pandas_layer = _lambda.LayerVersion.from_layer_version_arn(
+            self, "SdkPandasLayer",
+            layer_version_arn="arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python311:22"
         )
 
         loguru_layer = _lambda.LayerVersion(
