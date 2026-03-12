@@ -81,11 +81,10 @@ services:
       BUCKET_NAME: rearc-quest
       AWS_REGION: us-east-1
       EXECUTION_LEVEL: local
-      FILE_NAME_1": pr.data.0.Current
-      FILE_NAME_2": step_2.json
-      EXECUTION_LEVEL: aws
-      SERIES_ID : "PRS30006032
-      QUATER : "Q01
+      FILE_NAME_1: pr.data.0.Current
+      FILE_NAME_2: step_2.json
+      SERIES_ID: PRS30006032
+      QUATER: Q01
     depends_on:
       - minio
       - elasticmq
